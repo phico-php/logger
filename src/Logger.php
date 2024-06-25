@@ -6,6 +6,7 @@ namespace Phico\Logger;
 
 class Logger
 {
+    private $file;
     private string $level = 'debug';
     private string $filepath = '';
     private array $levels = [
@@ -28,6 +29,9 @@ class Logger
                 $this->$k = $options[$k];
             }
         }
+
+        // init files instance
+        $this->file = files(path("$this->filepath"));
     }
     public function alert(string $msg, mixed $context = null): void
     {
@@ -84,9 +88,9 @@ class Logger
     private function handle(string $level, $msg, $context): void
     {
         if (array_search($level, $this->levels) < array_search($this->level, $this->levels)) {
-            files()->append(path("$this->filepath"), sprintf("\n[%s] %s %s", date('Y-m-d H:i:s'), strtoupper($level), $msg));
+            $this->file->append(sprintf("\n[%s] %s %s", date('Y-m-d H:i:s'), strtoupper($level), $msg));
             if (!is_null($context)) {
-                files()->append(path("$this->filepath"), "\n" . json_encode($context, JSON_UNESCAPED_SLASHES));
+                $this->file->append("\n" . json_encode($context, JSON_UNESCAPED_SLASHES));
             }
         }
     }

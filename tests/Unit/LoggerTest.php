@@ -3,10 +3,10 @@
 use Phico\Logger\Logger;
 
 beforeEach(function () {
-    files()->create('test.log');
+    files('test.log')->create();
 });
 afterEach(function () {
-    files()->delete('test.log');
+    files('test.log')->delete();
 });
 
 
@@ -17,7 +17,7 @@ test('it logs an alert message', function () {
     ]);
     $logger->alert('This is an alert message');
 
-    expect(files()->read('test.log'))
+    expect(files('test.log')->read())
         ->toContain('[ALERT] This is an alert message');
 });
 
@@ -28,7 +28,7 @@ test('it logs a debug message', function () {
     ]);
     $logger->debug('This is a debug message');
 
-    expect(files()->read('test.log'))
+    expect(files('test.log')->read())
         ->toContain('[DEBUG] This is a debug message');
 });
 
@@ -40,7 +40,7 @@ test('it logs with context', function () {
     $context = ['user' => 'testuser', 'id' => 1];
     $logger->info('This is an info message', $context);
 
-    expect(files()->read('test.log'))
+    expect(files('test.log')->read())
         ->toContain('[INFO] This is an info message')
         ->toContain(json_encode($context, JSON_UNESCAPED_SLASHES));
 });
@@ -53,7 +53,7 @@ test('it does not log messages below the configured level', function () {
     $logger = new Logger();
     $logger->debug('This debug message should not be logged');
 
-    expect(files()->read('test.log'))
+    expect(files('test.log')->read())
         ->not->toContain('[DEBUG] This debug message should not be logged');
 });
 
@@ -66,7 +66,7 @@ test('it logs messages with different levels', function () {
     $logger->critical('This is a critical message');
     $logger->emerg('This is an emergency message');
 
-    $content = files()->read('test.log');
+    $content = files('test.log')->read();
 
     expect($content)->toContain('[ERROR] This is an error message');
     expect($content)->toContain('[CRITICAL] This is a critical message');
