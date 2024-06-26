@@ -6,7 +6,7 @@ if (!function_exists('logger')) {
     function logger(): \Phico\Logger\Logger
     {
         static $logger;
-        $logger = ($logger) ? $logger : new \Phico\Logger\Logger();
+        $logger = ($logger) ? $logger : new \Phico\Logger\Logger(config('logger'));
         return $logger;
     }
 }
