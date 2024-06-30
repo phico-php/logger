@@ -19,15 +19,17 @@ class Logger
         'info',
         'debug'
     ];
+    private array $options = [
+        'level' => 'debug',
+        'filepath' => sprintf('storage/logs/app-%s.log', date('Y-m-d')),
+    ];
 
 
-
-    public function __construct(array $options = [])
+    public function __construct(array $config = [])
     {
-        foreach (['level', 'filepath'] as $k) {
-            if (isset($options[$k])) {
-                $this->$k = $options[$k];
-            }
+        // apply default options, overriding with user config
+        foreach ($this->options as $k => $v) {
+            $this->$k = (isset($config[$k])) ? $config[$k] : $v;
         }
 
         // init files instance
