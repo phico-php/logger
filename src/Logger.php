@@ -21,7 +21,7 @@ class Logger
     ];
     private array $options = [
         'level' => 'debug',
-        'filepath' => sprintf('storage/logs/app-%s.log', date('Y-m-d')),
+        'filepath' => 'storage/logs/app.log',
     ];
 
 
