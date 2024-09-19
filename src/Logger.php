@@ -89,7 +89,7 @@ class Logger
 
     private function handle(string $level, $msg, $context): void
     {
-        if (array_search($this->level, $this->levels) > array_search($level, $this->levels)) {
+        if (array_search($this->level, $this->levels) >= array_search($level, $this->levels)) {
             $this->file->append(sprintf("\n[%s] %s %s", date('Y-m-d H:i:s'), strtoupper($level), $msg));
             if (!is_null($context)) {
                 $this->file->append("\n" . json_encode($context, JSON_UNESCAPED_SLASHES));
