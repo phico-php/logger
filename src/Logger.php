@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Phico\Logger;
 
+use Phico\Filesystem\FilesystemException;
+use RuntimeException;
+
 class Logger
 {
     private $file;
@@ -24,7 +27,12 @@ class Logger
         'filepath' => 'storage/logs/app.log',
     ];
 
-
+    /**
+     * Pass the config array through the constructor
+     * @param array $config
+     * @return void
+     * @throws RuntimeException
+     */
     public function __construct(array $config = [])
     {
         // apply default options, overriding with user config
@@ -35,58 +43,111 @@ class Logger
         // init files instance
         $this->file = files(path("$this->filepath"));
     }
+
+    /**
+     * Log an alert message
+     * @param string $msg
+     * @param mixed|null $context
+     * @return void
+     * @throws FilesystemException
+     */
     public function alert(string $msg, mixed $context = null): void
     {
         $this->handle('alert', $msg, $context);
     }
+
+    /**
+     * Log a critical message
+     * @param string $msg
+     * @param mixed|null $context
+     * @return void
+     * @throws FilesystemException
+     */
     public function critical(string $msg, mixed $context = null): void
     {
         $this->handle('critical', $msg, $context);
     }
+
+    /**
+     * Log a debug message
+     * @param string $msg
+     * @param mixed|null $context
+     * @return void
+     * @throws FilesystemException
+     */
     public function debug(string $msg, mixed $context = null): void
     {
         $this->handle('debug', $msg, $context);
     }
+
+    /**
+     * Log an emergency message
+     * @param string $msg
+     * @param mixed|null $context
+     * @return void
+     * @throws FilesystemException
+     */
     public function emerg(string $msg, mixed $context = null): void
     {
         $this->handle('emerg', $msg, $context);
     }
+
+    /**
+     * Log an error message
+     * @param string $msg
+     * @param mixed|null $context
+     * @return void
+     * @throws FilesystemException
+     */
     public function error(string $msg, mixed $context = null): void
     {
         $this->handle('error', $msg, $context);
     }
+
+    /**
+     * Log an info message
+     * @param string $msg
+     * @param mixed|null $context
+     * @return void
+     * @throws FilesystemException
+     */
     public function info(string $msg, mixed $context = null): void
     {
         $this->handle('info', $msg, $context);
     }
+
+    /**
+     * Log a notice message
+     * @param string $msg
+     * @param mixed|null $context
+     * @return void
+     * @throws FilesystemException
+     */
     public function notice(string $msg, mixed $context = null): void
     {
         $this->handle('notice', $msg, $context);
     }
+
+    /**
+     * Log a warning message
+     * @param string $msg
+     * @param mixed|null $context
+     * @return void
+     * @throws FilesystemException
+     */
     public function warning(string $msg, mixed $context = null): void
     {
         $this->handle('warning', $msg, $context);
     }
 
-    // public function level(string $level): self
-    // {
-    //     $level = strtolower($level);
-    //     if ( ! in_array($level, $this->levels)) {
-    //         throw new \Error("Cannot set logger level to unknown level '$level'");
-    //     }
-    //     $this->level = $level;
-    // }
-    // public function to(string $dest): self
-    // {
-    //     $this->dest = string $dest;
-    //     return $this;
-    // }
-    // public function use(string $adapter): self
-    // {
-    //     $this->adapter = string $adapter;
-    //     return $this;
-    // }
-
+    /**
+     * Handle the various log methods
+     * @param string $level
+     * @param mixed $msg
+     * @param mixed $context
+     * @return void
+     * @throws FilesystemException
+     */
     private function handle(string $level, $msg, $context): void
     {
         if (array_search($this->level, $this->levels) >= array_search($level, $this->levels)) {
